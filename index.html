@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ficky</title>
+<meta name="description" content="Personal portfolio Ficky Alviano">
+<meta name="author" content="Ficky">
+<meta property="og:title" content="Ficky">
+<meta property="og:description" content="Personal portfolio Ficky Alviano">
+<meta property="og:type" content="website">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+  
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #000000;
+  --card: #0a0a0a;
+  --card-hover: #111111;
+  --border: rgba(255, 255, 255, 0.12);
+  --border-soft: rgba(255, 255, 255, 0.07);
+  --text: #ffffff;
+  --muted: rgba(255, 255, 255, 0.5);
+  --muted-dim: rgba(255, 255, 255, 0.35);
+  --accent: #ffffff;
+  --accent-dim: rgba(255, 255, 255, 0.12);
+  --pixel: 'Press Start 2P', monospace;
+  --mono: 'Space Mono', monospace;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--mono);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  line-height: 1.6;
+  overflow-x: hidden;
+  padding-bottom: 96px;
+  background-image:
+    radial-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+.container {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 28px 20px;
+}
+
+/* --- PIXEL CORNERS --- */
+.px-clip {
+  clip-path: polygon(
+    0 8px, 4px 8px, 4px 4px, 8px 4px, 8px 0,
+    calc(100% - 8px) 0, calc(100% - 8px) 4px, calc(100% - 4px) 4px, calc(100% - 4px) 8px, 100% 8px,
+    100% calc(100% - 8px), calc(100% - 4px) calc(100% - 8px), calc(100% - 4px) calc(100% - 4px), calc(100% - 8px) calc(100% - 4px), calc(100% - 8px) 100%,
+    8px 100%, 8px calc(100% - 4px), 4px calc(100% - 4px), 4px calc(100% - 8px), 0 calc(100% - 8px)
+  );
+}
+
+::selection { background: var(--accent); color: #000; }
+
+/* --- PAGES --- */
+.page { display: none; animation: pageFade 0.3s ease; }
+.page.active { display: block; }
+@keyframes pageFade {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- PROFILE HEADER --- */
+.profile-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 32px;
+}
+
+.avatar-frame {
+  position: relative;
+  padding: 6px;
+  background: var(--card);
+  border: 0px solid var(--border);
+  margin-bottom: 18px;
+}
+.avatar-frame .avatar {
+  width: 148px;
+  height: 148px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+  image-rendering: auto;
+}
+.avatar-frame .status-dot {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #747f8d;
+  border: 4px solid #0a0a0a;
+  z-index: 2;
+}
+.avatar-frame .status-dot.online { background: #3ba55c; }
+.avatar-frame .status-dot.idle { background: #faa61a; }
+.avatar-frame .status-dot.dnd { background: #ed4245; }
+.avatar-frame .status-dot.streaming { background: #9146ff; }
+
+.display-name-wrap { text-align: center; margin-bottom: 14px; }
+.display-name {
+  font-family: var(--pixel);
+  font-size: 17px;
+  line-height: 1.5;
+  letter-spacing: 1px;
+  color: var(--text);
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  font-size: 12px;
+  color: var(--muted);
+  text-transform: lowercase;
+}
+.status-badge .dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  animation: blink 2.2s infinite;
+}
+.status-badge .dot.online { background: #3ba55c; }
+.status-badge .dot.idle { background: #faa61a; }
+.status-badge .dot.dnd { background: #ed4245; }
+.status-badge .dot.streaming { background: #9146ff; }
+.status-badge .dot.offline { background: #747f8d; animation: none; }
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+.status-custom { color: var(--muted); }
+
+/* --- ACTIVITY / SPOTIFY --- */
+.live-section { margin-bottom: 14px; }
+.live-card {
+  background: var(--card);
+  border: 1px solid var(--border-soft);
+  border-radius: 8px;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: border-color 0.25s, background 0.25s;
+}
+.live-card:hover { border-color: var(--accent); background: var(--card-hover); }
+.live-card .thumb {
+  width: 44px; height: 44px;
+  border-radius: 6px;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 1px solid var(--border-soft);
+}
+.live-info { flex: 1; min-width: 0; }
+.live-type {
+  font-size: 9px;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: 3px;
+}
+.live-name {
+  font-weight: 700;
+  font-size: 12px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.live-details {
+  color: var(--muted);
+  font-size: 11px;
+  margin-top: 2px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+/* --- SECTION BLOCKS --- */
+.section-block { margin-bottom: 34px; padding: 0 2px; }
+.section-title {
+  font-family: var(--pixel);
+  font-size: 10px;
+  color: var(--accent);
+  letter-spacing: 0.08em;
+  margin-bottom: 14px;
+  line-height: 1.6;
+}
+.section-title::before { content: '> '; color: var(--muted-dim); }
+.about-text { color: var(--muted); font-size: 12px; line-height: 1.8; }
+.about-text b, .about-text .pk { color: var(--text); font-weight: 700; }
+
+/* --- INFO LIST --- */
+.info-list { list-style: none; }
+.info-list li {
+  display: flex;
+  align-items: baseline;
+  margin-bottom: 10px;
+  font-size: 12px;
+}
+.info-label { min-width: 88px; color: var(--text); font-weight: 700; }
+.info-sep { color: var(--accent); margin: 0 8px; }
+.info-value { color: var(--muted); }
+
+/* --- TECH STACK MARQUEE --- */
+.tech-marquee-wrapper {
+  overflow: hidden;
+  mask-image: linear-gradient(to right, transparent 0%, #000 10%, #000 90%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 10%, #000 90%, transparent 100%);
+}
+.tech-track {
+  display: flex;
+  gap: 12px;
+  width: max-content;
+  animation: marquee 28s linear infinite;
+  will-change: transform;
+}
+@keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+.tech-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  background: var(--card);
+  border: 1px solid var(--border-soft);
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text);
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: border-color 0.25s, background 0.25s;
+}
+.tech-item:hover { border-color: var(--accent); background: var(--card-hover); }
+.tech-item::before { content: '['; color: var(--accent); }
+.tech-item::after { content: ']'; color: var(--accent); }
+
+/* --- DISCORD SERVER CARD --- */
+.server-card-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: var(--card);
+  border: 1px solid var(--border-soft);
+  border-radius: 8px;
+  color: var(--text);
+  text-decoration: none;
+  transition: border-color 0.25s, background 0.25s;
+}
+.server-card-link:hover { border-color: var(--accent); background: var(--card-hover); }
+.server-icon {
+  width: 44px; height: 44px;
+  border-radius: 8px;
+  overflow: hidden;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent-dim);
+}
+.server-icon img { width: 100%; height: 100%; object-fit: cover; }
+.server-icon-fallback { color: var(--accent); font-weight: 700; font-size: 12px; }
+.server-info { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.server-name {
+  font-weight: 700;
+  font-size: 12px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.server-meta { color: var(--muted); font-size: 11px; }
+.server-join-btn {
+  flex-shrink: 0;
+  padding: 8px 16px;
+  border-radius: 6px;
+  background: var(--accent);
+  color: #000;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+.server-join-btn:hover { opacity: 0.85; }
+.server-card-error {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 1px dashed rgba(237, 66, 69, 0.4);
+  background: rgba(237, 66, 69, 0.08);
+  color: var(--muted);
+  font-size: 11px;
+  text-align: center;
+  line-height: 1.6;
+}
+
+/* --- PAGE HEADERS --- */
+.page-header { margin-bottom: 22px; }
+.page-title {
+  font-family: var(--pixel);
+  font-size: 18px;
+  letter-spacing: 1px;
+  color: var(--text);
+}
+.page-title em { color: var(--accent); font-style: normal; }
+.page-subtitle { color: var(--muted); font-size: 12px; margin-top: 8px; }
+
+/* --- COMING SOON --- */
+.coming-soon-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  min-height: 220px;
+  background: var(--card);
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  padding: 24px;
+  text-align: center;
+}
+.coming-soon-card .pixel-icon { font-size: 28px; color: var(--accent); }
+.coming-soon-title {
+  font-family: var(--pixel);
+  font-size: 12px;
+  color: var(--text);
+  letter-spacing: 0.05em;
+}
+.coming-soon-desc { color: var(--muted); font-size: 12px; line-height: 1.7; max-width: 280px; }
+
+/* --- PROJECT CARDS --- */
+.projects-grid { display: flex; flex-direction: column; gap: 14px; }
+.project-card {
+  background: var(--card);
+  border: 1px solid var(--border-soft);
+  border-radius: 8px;
+  padding: 18px;
+  transition: border-color 0.25s, background 0.25s;
+}
+.project-card:hover { border-color: var(--accent); background: var(--card-hover); }
+.project-tag {
+  display: inline-block;
+  font-family: var(--pixel);
+  font-size: 8px;
+  color: var(--accent);
+  letter-spacing: 0.1em;
+  margin-bottom: 10px;
+}
+.project-name { font-family: var(--pixel); font-size: 11px; color: var(--text); margin-bottom: 10px; line-height: 1.7; }
+.project-desc { color: var(--muted); font-size: 12px; line-height: 1.7; margin-bottom: 14px; }
+.project-tech { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+.project-tech span {
+  font-size: 10px;
+  padding: 3px 9px;
+  background: var(--accent-dim);
+  color: var(--accent);
+  border-radius: 4px;
+  font-weight: 700;
+}
+.project-actions { display: flex; gap: 10px; }
+.project-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  text-decoration: none;
+  border: 1px solid var(--border-soft);
+  transition: all 0.2s;
+}
+.project-btn svg { width: 13px; height: 13px; flex-shrink: 0; }
+.project-btn.source { background: var(--card); color: var(--text); }
+.project-btn.source:hover { border-color: var(--accent); color: var(--accent); }
+.project-btn.preview { background: var(--accent); color: #000; border-color: var(--accent); }
+.project-btn.preview:hover { opacity: 0.85; }
+
+/* --- SOCIAL CARDS --- */
+.socials-grid { display: flex; flex-direction: column; gap: 10px; }
+.social-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  background: var(--card);
+  border: 1px solid var(--border-soft);
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--text);
+  transition: border-color 0.25s, background 0.25s, transform 0.2s;
+}
+.social-card:hover { border-color: var(--accent); background: var(--card-hover); transform: translateX(3px); }
+.social-icon {
+  width: 36px; height: 36px;
+  border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  font-size: 16px;
+}
+.social-icon.discord   { background: rgba(88, 101, 242, 0.14); color: #5865F2; }
+.social-icon.github    { background: rgba(255, 255, 255, 0.07); color: #e6edf3; }
+.social-icon.instagram { background: rgba(255, 255, 255, 0.07); color: #fff; }
+.social-icon.tiktok    { background: rgba(255, 255, 255, 0.07); color: #fff; }
+.social-icon.telegram  { background: rgba(38, 165, 222, 0.14); color: #26A5DE; }
+.social-icon.twitter   { background: rgba(255, 255, 255, 0.07); color: #fff; }
+.social-info { display: flex; flex-direction: column; flex: 1; min-width: 0; }
+.social-name { font-size: 12px; font-weight: 700; }
+.social-desc { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.social-arrow { color: var(--muted-dim); font-size: 14px; flex-shrink: 0; }
+.social-card:hover .social-arrow { color: var(--accent); }
+
+/* --- STATS / GITHUB --- */
+.gh-profile { background: var(--card); border: 1px solid var(--border-soft); border-radius: 8px; padding: 18px; margin-bottom: 16px; }
+.gh-profile-top { display: flex; gap: 14px; margin-bottom: 16px; }
+.gh-avatar {
+  width: 64px; height: 64px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  flex-shrink: 0;
+  object-fit: cover;
+}
+.gh-profile-info { flex: 1; min-width: 0; }
+.gh-name { font-family: var(--pixel); font-size: 12px; margin: 0 0 6px; line-height: 1.6; }
+.gh-username { font-size: 11px; color: var(--accent); }
+.gh-bio { font-size: 12px; color: var(--muted); margin: 8px 0 0; line-height: 1.6; }
+.gh-meta { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 10px; font-size: 11px; color: var(--muted-dim); }
+.gh-stats-row { display: flex; gap: 10px; flex-wrap: wrap; }
+.gh-stat {
+  display: flex; align-items: center; gap: 6px;
+  flex: 1;
+  min-width: 120px;
+  background: var(--card);
+  border: 1px solid var(--border-soft);
+  border-radius: 6px;
+  padding: 10px 12px;
+  font-size: 11px;
+}
+.gh-stat svg { width: 14px; height: 14px; color: var(--accent); flex-shrink: 0; }
+.gh-stat-num { font-weight: 700; color: var(--text); font-size: 13px; }
+.gh-stat-label { color: var(--muted-dim); margin-left: auto; }
+.gh-section-title {
+  display: flex; align-items: center; gap: 8px;
+  font-family: var(--pixel);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  margin: 22px 0 12px;
+}
+.gh-section-title::before { content: '> '; color: var(--muted-dim); }
+.repos-list { display: flex; flex-direction: column; gap: 10px; }
+.repo-loading { text-align: center; color: var(--muted); padding: 20px; font-size: 12px; }
+.repo-card {
+  background: var(--card);
+  border: 1px solid var(--border-soft);
+  border-radius: 8px;
+  padding: 14px 16px;
+  transition: border-color 0.25s, background 0.25s;
+  text-decoration: none;
+  color: var(--text);
+  display: block;
+}
+.repo-card:hover { border-color: var(--accent); background: var(--card-hover); }
+.repo-card-top { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.repo-name { font-size: 12px; font-weight: 700; color: var(--accent); }
+.repo-desc { font-size: 11px; color: var(--muted); line-height: 1.6; margin-bottom: 10px; }
+.repo-bottom { display: flex; flex-wrap: wrap; gap: 14px; font-size: 10px; color: var(--muted-dim); }
+.repo-lang { display: flex; align-items: center; gap: 5px; }
+.lang-dot { width: 9px; height: 9px; border-radius: 2px; }
+.stat-loading { opacity: 0.4; }
+
+/* --- SKELETON --- */
+@keyframes skeletonPulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 0.8; } }
+.skeleton { animation: skeletonPulse 1.4s ease-in-out infinite; background: rgba(255, 255, 255, 0.07); }
+
+/* --- BOTTOM NAV --- */
+.bottom-nav {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  padding-bottom: max(12px, env(safe-area-inset-bottom));
+  background: rgba(0, 0, 0, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid var(--border);
+}
+.nav-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  padding: 0 12px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  color: var(--muted-dim);
+  text-decoration: none;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  gap: 6px;
+}
+.nav-item svg { width: 16px; height: 16px; flex-shrink: 0; }
+.nav-item:hover { color: var(--text); background: rgba(255, 255, 255, 0.05); }
+.nav-item.active {
+  background: var(--accent);
+  color: #000;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.25);
+}
+.nav-item:active { transform: scale(0.94); }
+
+/* --- SCROLLBAR --- */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.14); }
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+/* --- RESPONSIVE --- */
+@media (max-width: 480px) {
+  .container { padding: 20px 16px; }
+  .avatar-frame .avatar { width: 128px; height: 128px; }
+  .display-name { font-size: 14px; }
+  .page-title { font-size: 15px; }
+  .nav-item span { display: none; }
+  .nav-item { width: 44px; padding: 0; }
+  .gh-stat { min-width: 100px; }
+}
+</style>
+</head>
+<body>
+
+<main class="container">
+
+  <!-- ===== PROFILE ===== -->
+  <section id="page-profile" class="page">
+
+    <div class="profile-header">
+      <div class="avatar-frame px-clip">
+        <img id="discord-avatar" src="" alt="Discord avatar" class="avatar" draggable="false">
+        <span id="avatar-status" class="status-dot offline"></span>
+      </div>
+      <div class="display-name-wrap">
+        <h1 class="display-name" id="discord-display-name">Loading...</h1>
+        <div class="status-badge" id="discord-status">
+          <span class="dot offline"></span>
+          <span class="status-text">offline</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="live-section" id="activity-section" style="display:none;">
+      <div id="discord-activity" class="live-card"></div>
+    </div>
+
+    <div class="live-section" id="spotify-section" style="display:none;">
+      <div id="spotify-activity" class="live-card"></div>
+    </div>
+
+    <div class="section-block">
+      <h2 class="section-title">About Me</h2>
+      <p class="about-text">
+        Just someone who enjoys <span class="pk">building things</span>, exploring tech,
+        listening to music, and turning random ideas into something real.
+      </p>
+    </div>
+
+    <div class="section-block">
+      <h2 class="section-title">Personal Information</h2>
+      <ul class="info-list">
+        <li><span class="info-label">NAME</span><span class="info-sep">:</span><span class="info-value">Ficky Alviano</span></li>
+        <li><span class="info-label">HOBBY</span><span class="info-sep">:</span><span class="info-value">Gaming</span></li>
+        <li><span class="info-label">REGION</span><span class="info-sep">:</span><span class="info-value">Indonesia</span></li>
+        <li><span class="info-label">FOCUS</span><span class="info-sep">:</span><span class="info-value">Web Dev & Discord Bots</span></li>
+      </ul>
+    </div>
+
+    <div class="section-block">
+      <h2 class="section-title">Tech Stack & Tools</h2>
+      <div class="tech-marquee-wrapper">
+        <div class="tech-track" id="tech-track"></div>
+      </div>
+    </div>
+
+    <div class="section-block">
+      <h2 class="section-title">Discord Community</h2>
+      <div id="discordServer"><div class="skeleton px-clip" style="border-radius:8px;height:68px;"></div></div>
+    </div>
+
+  </section>
+
+  <!-- ===== BLOG ===== -->
+  <section id="page-blog" class="page">
+    <div class="page-header">
+      <h1 class="page-title">Blog<em>_</em></h1>
+      <p class="page-subtitle">thoughts, tutorials & notes</p>
+    </div>
+    <div class="coming-soon-card">
+      <span class="pixel-icon">&#9654;</span>
+      <p class="coming-soon-title">COMING SOON</p>
+      <p class="coming-soon-desc">Articles, tutorials, and thoughts are on the way. Stay tuned!</p>
+    </div>
+  </section>
+
+  <!-- ===== PROJECTS ===== -->
+  <section id="page-projects" class="page">
+    <div class="page-header">
+      <h1 class="page-title">Projects<em>_</em></h1>
+      <p class="page-subtitle">things I have built</p>
+    </div>
+    <div class="projects-grid">
+      <div class="project-card">
+        <span class="project-tag">// personal</span>
+        <h3 class="project-name">Personal Website</h3>
+        <p class="project-desc">A minimalist personal website featuring real-time Discord integration, activity status, server info, and social links.</p>
+        <div class="project-tech">
+          <span>HTML</span><span>CSS</span><span>JavaScript</span><span>Lanyard API</span>
+        </div>
+        <div class="project-actions">
+          <a href="https://github.com/vxqe/ficky" class="project-btn source" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+            Source
+          </a>
+          <a href="https://ficky.my.id" class="project-btn preview" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            Preview
+          </a>
+        </div>
+      </div>
+      <div class="project-card">
+        <span class="project-tag">// web</span>
+        <h3 class="project-name">LunarFis</h3>
+        <p class="project-desc">LunarFis interactive website.</p>
+        <div class="project-tech">
+          <span>HTML</span><span>CSS</span><span>JavaScript</span>
+        </div>
+        <div class="project-actions">
+          <a href="https://vxqe.github.io/lunarfis/" class="project-btn preview" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            Preview
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SOCIALS ===== -->
+  <section id="page-socials" class="page">
+    <div class="page-header">
+      <h1 class="page-title">Socials<em>_</em></h1>
+      <p class="page-subtitle">find me online</p>
+    </div>
+    <div class="socials-grid">
+      <a href="https://github.com/vxqe" class="social-card" target="_blank" rel="noopener noreferrer">
+        <div class="social-icon github"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.39.6.11.79-.26.79-.58v-2.23c-3.34.73-4.03-1.42-4.03-1.42-.55-1.39-1.33-1.76-1.33-1.76-1.09-.75.08-.73.08-.73 1.21.08 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.49 1 .11-.77.42-1.31.76-1.61-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.17 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 016 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.65.24 2.87.12 3.17.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.82 1.1.82 2.22v3.29c0 .32.19.7.8.58C20.56 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg></div>
+        <div class="social-info"><span class="social-name">GitHub</span><span class="social-desc">code & projects</span></div>
+        <span class="social-arrow">&gt;</span>
+      </a>
+      <a href="https://discord.gg/JbtFkmJztP" class="social-card" target="_blank" rel="noopener noreferrer">
+        <div class="social-icon discord"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 00-.041-.106 13.107 13.107 0 01-1.872-.892.077.077 0 01-.008-.128 10.2 10.2 0 00.372-.292.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.839 19.839 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg></div>
+        <div class="social-info"><span class="social-name">Discord</span><span class="social-desc">chat & community</span></div>
+        <span class="social-arrow">&gt;</span>
+      </a>
+      <a href="https://instagram.com/fickyalv" class="social-card" target="_blank" rel="noopener noreferrer">
+        <div class="social-icon instagram"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></div>
+        <div class="social-info"><span class="social-name">Instagram</span><span class="social-desc">photos & stories</span></div>
+        <span class="social-arrow">&gt;</span>
+      </a>
+      <a href="https://tiktok.com/@fickyalv" class="social-card" target="_blank" rel="noopener noreferrer">
+        <div class="social-icon tiktok"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 00-.79-.05A6.34 6.34 0 003.15 15.2a6.34 6.34 0 0010.86 4.48V13a8.28 8.28 0 005.58 2.17v-3.45a4.85 4.85 0 01-3.77-1.59V6.69h3.77z"/></svg></div>
+        <div class="social-info"><span class="social-name">TikTok</span><span class="social-desc">short videos</span></div>
+        <span class="social-arrow">&gt;</span>
+      </a>
+      <a href="https://t.me/natanzqi" class="social-card" target="_blank" rel="noopener noreferrer">
+        <div class="social-icon telegram"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 000 12a12 12 0 0012 12 12 12 0 0012-12A12 12 0 0012 0a12 12 0 00-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 01.171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.479.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg></div>
+        <div class="social-info"><span class="social-name">Telegram</span><span class="social-desc">messages</span></div>
+        <span class="social-arrow">&gt;</span>
+      </a>
+      <a href="https://x.com/fickyalv" class="social-card" target="_blank" rel="noopener noreferrer">
+        <div class="social-icon twitter"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></div>
+        <div class="social-info"><span class="social-name">X / Twitter</span><span class="social-desc">thoughts & updates</span></div>
+        <span class="social-arrow">&gt;</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- ===== STATS ===== -->
+  <section id="page-stats" class="page">
+    <div class="page-header">
+      <h1 class="page-title">Stats<em>_</em></h1>
+      <p class="page-subtitle">a quick look at my journey</p>
+    </div>
+    <div class="gh-profile">
+      <div class="gh-profile-top">
+        <img class="gh-avatar" id="gh-avatar" src="" alt="GitHub Avatar">
+        <div class="gh-profile-info">
+          <h2 class="gh-name" id="gh-name">—</h2>
+          <span class="gh-username" id="gh-username">@—</span>
+          <p class="gh-bio" id="gh-bio">—</p>
+          <div class="gh-meta">
+            <span id="gh-location">—</span>
+            <span id="gh-joined"></span>
+          </div>
+        </div>
+      </div>
+      <div class="gh-stats-row">
+        <div class="gh-stat">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7a2 2 0 012-2h3.172a2 2 0 011.414.586l1.828 1.828A2 2 0 0012.828 8H19a2 2 0 012 2v7a2 2 0 01-2 2H5a2 2 0 01-2-2V7z"/></svg>
+          <span class="gh-stat-num" data-github="repos">—</span>
+          <span class="gh-stat-label">Repos</span>
+        </div>
+        <div class="gh-stat">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <span class="gh-stat-num" data-github="stars">—</span>
+          <span class="gh-stat-label">Stars</span>
+        </div>
+        <div class="gh-stat">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4-4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+          <span class="gh-stat-num" data-github="followers">—</span>
+          <span class="gh-stat-label">Followers</span>
+        </div>
+        <div class="gh-stat">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          <span class="gh-stat-num" data-github="following">—</span>
+          <span class="gh-stat-label">Following</span>
+        </div>
+      </div>
+    </div>
+    <h3 class="gh-section-title">Repositories</h3>
+    <div class="repos-list" id="repos-list">
+      <div class="repo-loading">loading repositories...</div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ===== BOTTOM NAV ===== -->
+<nav class="bottom-nav" id="bottom-nav">
+  <a href="#blog" class="nav-item" data-page="blog">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+    <span>Blog</span>
+  </a>
+  <a href="#projects" class="nav-item" data-page="projects">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 012-2h3.172a2 2 0 011.414.586l1.828 1.828A2 2 0 0012.828 8H19a2 2 0 012 2v7a2 2 0 01-2 2H5a2 2 0 01-2-2V7z"/></svg>
+    <span>Projects</span>
+  </a>
+  <a href="#profile" class="nav-item active" data-page="profile">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+    <span>Profile</span>
+  </a>
+  <a href="#socials" class="nav-item" data-page="socials">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+    <span>Socials</span>
+  </a>
+  <a href="#stats" class="nav-item" data-page="stats">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+    <span>Stats</span>
+  </a>
+</nav>
+
+<script>
+const PERSON_INFO = {
+  discordId: '271771298772811777',
+  discordInviteCode: 'JbtFkmJztP'
+};
+const GITHUB_USERNAME = 'vxqe';
+const GITHUB_API_BASE = 'https://api.github.com';
+const DISCORD_CDN = 'https://cdn.discordapp.com';
+
+const TECH_STACK = [
+  'HTML5', 'CSS3', 'JavaScript', 'Node.js', 'Next.js',
+  'Tailwind', 'Python', 'GitHub', 'Cloudflare', 'Vercel',
+  'NPM', 'Bun', 'VS Code', 'SQL', 'linux'
+];
+
+const LANG_COLORS = {
+  JavaScript: '#f1e05a', TypeScript: '#3178c6', Python: '#3572A5', HTML: '#e34c26',
+  CSS: '#563d7c', Java: '#b07219', 'C++': '#ffffff', C: '#555555', Go: '#00ADD8',
+  Rust: '#dea584', PHP: '#4F5D95', Ruby: '#701516', Swift: '#F05138',
+  Kotlin: '#A97BFF', Dart: '#00B4AB', Shell: '#89e051', Lua: '#000080',
+  'Jupyter Notebook': '#DA5B0B', 'C#': '#178600', Vue: '#41b883', Svelte: '#ffffff'
+};
+
+const $ = (sel) => document.querySelector(sel);
+const $$ = (sel) => document.querySelectorAll(sel);
+
+function escapeHtml(str) {
+  if (!str) return '';
+  const d = document.createElement('div');
+  d.textContent = str;
+  return d.innerHTML;
+}
+
+/* --- NAVIGATION --- */
+function initNavigation() {
+  const navItems = $$('.nav-item');
+  const pages = $$('.page');
+
+  function navigateTo(pageId) {
+    navItems.forEach(item => item.classList.remove('active'));
+    pages.forEach(page => page.classList.remove('active'));
+    const activeNav = $(`.nav-item[data-page="${pageId}"]`);
+    const activePage = $(`#page-${pageId}`);
+    if (activeNav) activeNav.classList.add('active');
+    if (activePage) activePage.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  navItems.forEach(item => {
+    item.addEventListener('click', (e) => {
+      e.preventDefault();
+      navigateTo(item.dataset.page);
+      if (history.replaceState) history.replaceState(null, '', '#' + item.dataset.page);
+    });
+  });
+
+  window.addEventListener('hashchange', () => {
+    const hash = location.hash.replace('#', '');
+    if (hash && $(`#page-${hash}`)) navigateTo(hash);
+  });
+
+  const hash = location.hash.replace('#', '');
+  if (hash && $(`#page-${hash}`)) navigateTo(hash);
+  else navigateTo('profile');
+}
+
+/* --- TECH STACK --- */
+function renderTechStack() {
+  const track = $('#tech-track');
+  if (!track) return;
+  const items = TECH_STACK.map(t => `<span class="tech-item">${escapeHtml(t)}</span>`).join('');
+  track.innerHTML = items + items;
+}
+
+/* --- DISCORD (Lanyard) --- */
+const STATUS_LABELS = { online: 'online', idle: 'idle', dnd: 'dnd', streaming: 'streaming', offline: 'offline' };
+
+async function loadDiscordStatus() {
+  const avatarEl = $('#discord-avatar');
+  const nameEl = $('#discord-display-name');
+  const avatarDot = $('#avatar-status');
+  const statusWrap = $('#discord-status');
+
+  try {
+    const res = await fetch(`https://api.lanyard.rest/v1/users/${PERSON_INFO.discordId}?t=${Date.now()}`);
+    const json = await res.json();
+    if (!json.success) throw new Error('Lanyard error');
+    const d = json.data;
+
+    if (nameEl) nameEl.textContent = d.discord_user?.global_name || d.discord_user?.username || 'Unknown';
+    if (avatarEl && d.discord_user?.avatar) {
+      const ext = d.discord_user.avatar.startsWith('a_') ? 'gif' : 'png';
+      avatarEl.src = `${DISCORD_CDN}/avatars/${PERSON_INFO.discordId}/${d.discord_user.avatar}.${ext}?size=256`;
+    }
+
+    const activities = d.activities || [];
+    const isStreaming = activities.some(a => a.type === 1);
+    const statusForIcon = isStreaming ? 'streaming' : d.discord_status;
+    const customStatus = activities.find(a => a.type === 4)?.state || null;
+
+    if (avatarDot) {
+      avatarDot.className = 'status-dot ' + (isStreaming ? 'streaming' : d.discord_status || 'offline');
+    }
+    if (statusWrap) {
+      statusWrap.innerHTML =
+        `<span class="dot ${statusForIcon}"></span>` +
+        `<span class="status-text">${STATUS_LABELS[statusForIcon] || 'offline'}</span>` +
+        (customStatus ? `<span class="status-custom">- ${escapeHtml(customStatus)}</span>` : '');
+    }
+
+    const actSection = $('#activity-section');
+    const actCard = $('#discord-activity');
+    const nonSpotify = activities.filter(a => a.name !== 'Spotify' && a.type !== 4);
+    if (actSection && actCard) {
+      if (nonSpotify.length > 0) {
+        actSection.style.display = 'block';
+        const act = nonSpotify[0];
+        const typeLabel = act.type === 0 ? 'playing' : act.type === 1 ? 'streaming' : act.type === 2 ? 'listening' : act.type === 3 ? 'watching' : 'activity';
+        actCard.innerHTML =
+          `<div class="live-type">${typeLabel}</div>` +
+          `<div class="live-name">${escapeHtml(act.name)}</div>` +
+          (act.details ? `<div class="live-details">${escapeHtml(act.details)}</div>` : '') +
+          (act.state ? `<div class="live-details">${escapeHtml(act.state)}</div>` : '');
+      } else {
+        actSection.style.display = 'none';
+      }
+    }
+
+    const spotSection = $('#spotify-section');
+    const spotCard = $('#spotify-activity');
+    const spotify = activities.find(a => a.name === 'Spotify');
+    if (spotSection && spotCard) {
+      if (spotify) {
+        spotSection.style.display = 'block';
+        const art = spotify.assets?.large_image
+          ? `https://i.scdn.co/image/${spotify.assets.large_image.replace('spotify:', '')}`
+          : '';
+        spotCard.innerHTML =
+          (art ? `<img class="thumb" src="${art}" alt="Album art" draggable="false">` : '') +
+          `<div class="live-info">
+            <div class="live-type">listening</div>
+            <div class="live-name">${escapeHtml(spotify.details || 'Unknown Track')}</div>
+            <div class="live-details">${escapeHtml(spotify.state || 'Unknown Artist')}</div>
+          </div>`;
+      } else {
+        spotSection.style.display = 'none';
+      }
+    }
+
+  } catch (err) {
+    console.error('Error fetching Discord:', err);
+    if (avatarEl) avatarEl.src = 'https://cdn.discordapp.com/embed/avatars/0.png';
+  }
+}
+
+/* --- DISCORD SERVER CARD --- */
+async function loadDiscordServer() {
+  const wrap = $('#discordServer');
+  if (!wrap) return;
+  try {
+    const inviteCode = PERSON_INFO.discordInviteCode;
+    const res = await fetch(`https://discord.com/api/v10/invites/${inviteCode}?with_counts=true`);
+    if (!res.ok) throw new Error('Invite tidak valid (status ' + res.status + ')');
+    const invite = await res.json();
+    const guild = invite.guild || {};
+    const serverName = guild.name || 'Discord Server';
+    const members = typeof invite.approximate_member_count === 'number'
+      ? invite.approximate_member_count.toLocaleString('id-ID')
+      : '?';
+    const iconUrl = guild.icon ? `${DISCORD_CDN}/icons/${guild.id}/${guild.icon}.png?size=128` : null;
+    wrap.innerHTML =
+      `<a href="https://discord.gg/${inviteCode}" target="_blank" rel="noopener noreferrer" class="server-card-link">
+        <div class="server-icon">
+          ${iconUrl
+            ? `<img src="${iconUrl}" alt="${escapeHtml(serverName)}" draggable="false">`
+            : `<div class="server-icon-fallback">${escapeHtml(serverName.slice(0, 2).toUpperCase())}</div>`}
+        </div>
+        <div class="server-info">
+          <span class="server-name">${escapeHtml(serverName)}</span>
+          <span class="server-meta">${members} members</span>
+        </div>
+        <span class="server-join-btn px-clip">Join</span>
+      </a>`;
+  } catch (err) {
+    console.error('Error fetching Discord server:', err);
+    wrap.innerHTML = `<div class="server-card-error">${escapeHtml(err.message)}</div>`;
+  }
+}
+
+/* --- GITHUB --- */
+async function fetchGitHubData() {
+  const cache = { repos: [], user: null, totalStars: 0 };
+  try {
+    const userRes = await fetch(`${GITHUB_API_BASE}/users/${GITHUB_USERNAME}`);
+    if (userRes.ok) cache.user = await userRes.json();
+
+    const reposRes = await fetch(`${GITHUB_API_BASE}/users/${GITHUB_USERNAME}/repos?per_page=100&sort=updated`);
+    if (reposRes.ok) cache.repos = await reposRes.json();
+
+    cache.totalStars = cache.repos.reduce((s, r) => s + (r.stargazers_count || 0), 0);
+  } catch (e) {
+    console.warn('GitHub API error:', e);
+  }
+  return cache;
+}
+
+function animateNumber(el, target, duration = 800) {
+  const startTime = performance.now();
+  function update(now) {
+    const progress = Math.min((now - startTime) / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    el.textContent = Math.round(target * eased);
+    if (progress < 1) requestAnimationFrame(update);
+  }
+  requestAnimationFrame(update);
+}
+
+function renderRepos(repos) {
+  const list = $('#repos-list');
+  if (!list) return;
+  const top = repos.filter(r => !r.fork).slice(0, 10);
+  if (!top.length) {
+    list.innerHTML = '<div class="repo-loading">no public repositories</div>';
+    return;
+  }
+  list.innerHTML = top.map(r => {
+    const lang = r.language || 'Unknown';
+    const color = LANG_COLORS[lang] || '#888';
+    const desc = r.description ? `<div class="repo-desc">${escapeHtml(r.description.slice(0, 120))}</div>` : '';
+    return `<a href="${r.html_url}" class="repo-card" target="_blank" rel="noopener noreferrer">
+      <div class="repo-card-top">
+        <span class="repo-name">${escapeHtml(r.name)}</span>
+      </div>
+      ${desc}
+      <div class="repo-bottom">
+        <span class="repo-lang"><span class="lang-dot" style="background:${color}"></span>${escapeHtml(lang)}</span>
+        <span>&#9733; ${r.stargazers_count || 0}</span>
+        <span>&#9737; ${r.forks_count || 0}</span>
+      </div>
+    </a>`;
+  }).join('');
+}
+
+async function updateStats() {
+  const statsEls = $$('[data-github]');
+  statsEls.forEach(el => el.classList.add('stat-loading'));
+
+  const gh = await fetchGitHubData();
+
+  statsEls.forEach(el => el.classList.remove('stat-loading'));
+
+  if (gh.user) {
+    animateNumber($('[data-github="repos"]'), gh.user.public_repos || 0);
+    animateNumber($('[data-github="stars"]'), gh.totalStars);
+    animateNumber($('[data-github="followers"]'), gh.user.followers || 0);
+    animateNumber($('[data-github="following"]'), gh.user.following || 0);
+
+    const avatar = $('#gh-avatar');
+    const name = $('#gh-name');
+    const username = $('#gh-username');
+    const bio = $('#gh-bio');
+    const location = $('#gh-location');
+    const joined = $('#gh-joined');
+
+    if (avatar) { avatar.src = gh.user.avatar_url; avatar.alt = gh.user.login; }
+    if (name) name.textContent = gh.user.name || gh.user.login;
+    if (username) username.textContent = '@' + gh.user.login;
+    if (bio) bio.textContent = gh.user.bio || '';
+    if (location && gh.user.location) location.textContent = '\u{1F4CD} ' + gh.user.location;
+    else if (location) location.textContent = '';
+    if (joined && gh.user.created_at) {
+      const d = new Date(gh.user.created_at);
+      joined.textContent = 'joined ' + d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+    }
+  }
+
+  renderRepos(gh.repos);
+}
+
+/* --- INIT --- */
+document.addEventListener('DOMContentLoaded', () => {
+  initNavigation();
+  renderTechStack();
+  loadDiscordStatus();
+  loadDiscordServer();
+  setInterval(loadDiscordStatus, 30000);
+  setInterval(loadDiscordServer, 30000);
+  updateStats();
+});
+</script>
+
+</body>
+</html>
