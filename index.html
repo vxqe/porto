@@ -849,6 +849,25 @@ function renderTechStack() {
 /* --- DISCORD (Lanyard) --- */
 const STATUS_LABELS = { online: 'online', idle: 'idle', dnd: 'dnd', streaming: 'streaming', offline: 'offline' };
 
+function resolveActivityArt(activity) {
+  const img = activity?.assets?.large_image;
+  if (!img) return null;
+  if (img.startsWith('mp:external/')) {
+    return `https://media.discordapp.net/external/${img.replace('mp:external/', '')}/https`;
+  }
+  if (img.startsWith('mp:attachments/')) {
+    return `https://media.discordapp.net/attachments/${img.replace('mp:attachments/', '')}`;
+  }
+  if (img.startsWith('spotify:')) {
+    return `https://i.scdn.co/image/${img.replace('spotify:', '')}`;
+  }
+  if (img.startsWith('http')) return img;
+  if (activity.application_id) {
+    return `https://cdn.discordapp.com/app-assets/${activity.application_id}/${img}`;
+  }
+  return null;
+}
+
 async function loadDiscordStatus() {
   const avatarEl = $('#discord-avatar');
   const nameEl = $('#discord-display-name');
@@ -890,11 +909,15 @@ async function loadDiscordStatus() {
         actSection.style.display = 'block';
         const act = nonSpotify[0];
         const typeLabel = act.type === 0 ? 'playing' : act.type === 1 ? 'streaming' : act.type === 2 ? 'listening' : act.type === 3 ? 'watching' : 'activity';
+        const art = resolveActivityArt(act);
         actCard.innerHTML =
-          `<div class="live-type">${typeLabel}</div>` +
-          `<div class="live-name">${escapeHtml(act.name)}</div>` +
-          (act.details ? `<div class="live-details">${escapeHtml(act.details)}</div>` : '') +
-          (act.state ? `<div class="live-details">${escapeHtml(act.state)}</div>` : '');
+          (art ? `<img class="thumb" src="${art}" alt="${escapeHtml(act.name)}" draggable="false">` : '') +
+          `<div class="live-info">
+            <div class="live-type">${typeLabel}</div>
+            <div class="live-name">${escapeHtml(act.name)}</div>
+            ${act.details ? `<div class="live-details">${escapeHtml(act.details)}</div>` : ''}
+            ${act.state ? `<div class="live-details">${escapeHtml(act.state)}</div>` : ''}
+          </div>`;
       } else {
         actSection.style.display = 'none';
       }
